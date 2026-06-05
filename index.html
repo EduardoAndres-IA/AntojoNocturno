@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Antojo Nocturno — Postres de medianoche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#0b0a14;
+    --night-2:#120f1f;
+    --surface:#181428;
+    --surface-2:#1f1a30;
+    --line:rgba(244,237,224,.08);
+    --honey:#f3b14a;
+    --honey-soft:#f7c777;
+    --caramel:#e08a4a;
+    --plum:#6a4a7a;
+    --cream:#f4ede0;
+    --muted:#a79db4;
+    --muted-2:#766d85;
+    --display:'Fraunces',Georgia,serif;
+    --body:'Hanken Grotesk',system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--body);
+    background:var(--night);
+    color:var(--cream);
+    line-height:1.6;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* atmosphere */
+  .grain{
+    position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .glow-bg{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(700px 500px at 80% -5%, rgba(243,177,74,.13), transparent 60%),
+      radial-gradient(600px 600px at 5% 30%, rgba(106,74,122,.18), transparent 60%),
+      radial-gradient(900px 700px at 50% 110%, rgba(224,138,74,.08), transparent 60%);
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;position:relative;z-index:2}
+
+  /* nav */
+  nav{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(14px);
+    background:rgba(11,10,20,.72);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--cream)}
+  .brand .moon{
+    width:30px;height:30px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--honey-soft), var(--honey) 55%, var(--caramel));
+    box-shadow:0 0 22px rgba(243,177,74,.55);position:relative;flex-shrink:0;
+  }
+  .brand .moon::after{
+    content:"";position:absolute;width:9px;height:9px;border-radius:50%;
+    background:var(--night);top:5px;right:5px;
+  }
+  .brand b{font-family:var(--display);font-weight:600;font-size:1.32rem;letter-spacing:.3px}
+  .nav-links{display:flex;align-items:center;gap:28px}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:.94rem;font-weight:500;transition:color .2s}
+  .nav-links a:hover{color:var(--cream)}
+  .cart-btn{
+    display:flex;align-items:center;gap:9px;cursor:pointer;
+    background:linear-gradient(135deg,var(--honey),var(--caramel));
+    color:#2a1606;border:none;border-radius:999px;
+    padding:10px 18px;font-family:var(--body);font-weight:700;font-size:.92rem;
+    transition:transform .18s, box-shadow .18s;box-shadow:0 6px 18px rgba(243,177,74,.28);
+  }
+  .cart-btn:hover{transform:translateY(-1px);box-shadow:0 10px 26px rgba(243,177,74,.4)}
+  .cart-count{
+    background:var(--night);color:var(--honey-soft);border-radius:999px;
+    min-width:21px;height:21px;display:inline-flex;align-items:center;justify-content:center;
+    font-size:.78rem;padding:0 6px;
+  }
+
+  /* hero */
+  header{position:relative;padding:96px 0 80px;overflow:hidden}
+  .moon-big{
+    position:absolute;top:-60px;right:-40px;width:340px;height:340px;border-radius:50%;
+    background:radial-gradient(circle at 38% 32%, #fff3da, var(--honey-soft) 45%, var(--caramel) 80%);
+    box-shadow:0 0 120px rgba(243,177,74,.35), inset -28px -22px 60px rgba(176,96,40,.4);
+    opacity:.92;z-index:1;
+  }
+  @media(max-width:760px){.moon-big{width:200px;height:200px;top:-30px;right:-50px}}
+  .hero-content{position:relative;z-index:3;max-width:680px}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:9px;font-size:.82rem;font-weight:600;
+    letter-spacing:2.5px;text-transform:uppercase;color:var(--honey-soft);
+    border:1px solid var(--line);border-radius:999px;padding:7px 16px;margin-bottom:26px;
+    background:rgba(243,177,74,.05);
+  }
+  h1{
+    font-family:var(--display);font-weight:600;font-size:clamp(2.7rem,7vw,4.8rem);
+    line-height:1.02;letter-spacing:-1px;margin-bottom:22px;
+  }
+  h1 em{font-style:italic;color:var(--honey-soft);font-weight:500}
+  .lede{font-size:1.18rem;color:var(--muted);max-width:520px;margin-bottom:36px}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .btn-primary{
+    background:linear-gradient(135deg,var(--honey),var(--caramel));color:#2a1606;
+    text-decoration:none;border:none;cursor:pointer;border-radius:999px;
+    padding:15px 30px;font-family:var(--body);font-weight:700;font-size:1rem;
+    transition:transform .18s,box-shadow .18s;box-shadow:0 8px 24px rgba(243,177,74,.3);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(243,177,74,.45)}
+  .hours{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:.95rem}
+  .dot-live{width:9px;height:9px;border-radius:50%;background:#5fd38d;box-shadow:0 0 10px #5fd38d;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+  /* promo strip */
+  .promo{
+    margin-top:64px;border-radius:20px;position:relative;overflow:hidden;
+    background:linear-gradient(110deg, rgba(243,177,74,.14), rgba(106,74,122,.16));
+    border:1px solid rgba(243,177,74,.22);
+    padding:26px 30px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  }
+  .promo h3{font-family:var(--display);font-weight:600;font-size:1.4rem;margin-bottom:4px}
+  .promo p{color:var(--muted);font-size:.96rem}
+  .code-chip{
+    font-family:var(--body);font-weight:700;letter-spacing:2px;font-size:1.05rem;
+    background:var(--night);border:1px dashed var(--honey);color:var(--honey-soft);
+    padding:13px 22px;border-radius:12px;white-space:nowrap;
+  }
+
+  /* sections */
+  section{padding:72px 0;position:relative;z-index:2}
+  .sec-head{margin-bottom:40px}
+  .sec-head .kicker{color:var(--honey-soft);font-weight:600;letter-spacing:2px;text-transform:uppercase;font-size:.8rem}
+  .sec-head h2{font-family:var(--display);font-weight:600;font-size:clamp(2rem,4.5vw,2.9rem);margin-top:8px;letter-spacing:-.5px}
+  .cat-title{
+    font-family:var(--display);font-size:1.5rem;font-weight:600;margin:46px 0 20px;
+    display:flex;align-items:center;gap:14px;color:var(--cream);
+  }
+  .cat-title:first-of-type{margin-top:0}
+  .cat-title::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+  .card{
+    background:linear-gradient(180deg,var(--surface),var(--night-2));
+    border:1px solid var(--line);border-radius:18px;padding:24px;
+    display:flex;flex-direction:column;gap:6px;position:relative;overflow:hidden;
+    transition:transform .22s, border-color .22s, box-shadow .22s;
+  }
+  .card::before{
+    content:"";position:absolute;inset:0;opacity:0;transition:opacity .3s;
+    background:radial-gradient(300px 160px at 50% -20%, rgba(243,177,74,.16), transparent 70%);
+  }
+  .card:hover{transform:translateY(-4px);border-color:rgba(243,177,74,.3);box-shadow:0 18px 40px rgba(0,0,0,.4)}
+  .card:hover::before{opacity:1}
+  .card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;position:relative;z-index:1}
+  .card h4{font-family:var(--display);font-weight:600;font-size:1.18rem;line-height:1.2}
+  .card .meta{color:var(--muted-2);font-size:.85rem;position:relative;z-index:1}
+  .card .price{font-family:var(--display);font-weight:600;font-size:1.25rem;color:var(--honey-soft);white-space:nowrap}
+  .card .add{
+    margin-top:14px;background:rgba(243,177,74,.1);color:var(--honey-soft);
+    border:1px solid rgba(243,177,74,.25);border-radius:11px;padding:10px;
+    font-family:var(--body);font-weight:600;font-size:.92rem;cursor:pointer;
+    transition:background .18s,color .18s;position:relative;z-index:1;
+  }
+  .card .add:hover{background:var(--honey);color:#2a1606}
+  .card.feat{border-color:rgba(243,177,74,.28);background:linear-gradient(180deg, rgba(243,177,74,.07), var(--night-2))}
+  .tag{
+    align-self:flex-start;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+    color:#2a1606;background:linear-gradient(135deg,var(--honey),var(--caramel));
+    padding:4px 10px;border-radius:999px;position:relative;z-index:1;
+  }
+
+  /* how it works */
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+  .step{background:var(--night-2);border:1px solid var(--line);border-radius:16px;padding:26px}
+  .step .n{font-family:var(--display);font-size:2rem;color:var(--honey-soft);font-weight:600}
+  .step h4{font-size:1.08rem;margin:8px 0 6px}
+  .step p{color:var(--muted);font-size:.93rem}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:54px 0 40px;position:relative;z-index:2;background:var(--night-2)}
+  .foot-grid{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap}
+  footer h5{font-family:var(--display);font-size:1.1rem;margin-bottom:12px}
+  footer p,footer a{color:var(--muted);font-size:.92rem;text-decoration:none;display:block;margin-bottom:6px}
+  footer a:hover{color:var(--honey-soft)}
+  .copy{margin-top:36px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted-2);font-size:.85rem}
+
+  /* cart drawer */
+  .backdrop{position:fixed;inset:0;background:rgba(5,4,10,.6);backdrop-filter:blur(3px);z-index:90;opacity:0;visibility:hidden;transition:.25s}
+  .backdrop.open{opacity:1;visibility:visible}
+  .drawer{
+    position:fixed;top:0;right:0;height:100%;width:min(420px,100%);z-index:100;
+    background:var(--night-2);border-left:1px solid var(--line);
+    transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);
+    display:flex;flex-direction:column;
+  }
+  .drawer.open{transform:translateX(0)}
+  .drawer-head{padding:22px 24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  .drawer-head h3{font-family:var(--display);font-weight:600;font-size:1.35rem}
+  .x{background:none;border:none;color:var(--muted);font-size:1.6rem;cursor:pointer;line-height:1}
+  .x:hover{color:var(--cream)}
+  .drawer-body{flex:1;overflow-y:auto;padding:18px 24px}
+  .empty{text-align:center;color:var(--muted-2);padding:60px 0}
+  .empty .moon{width:54px;height:54px;border-radius:50%;margin:0 auto 16px;background:radial-gradient(circle at 35% 30%, var(--honey-soft), var(--caramel));opacity:.5}
+  .ci{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+  .ci .info{flex:1}
+  .ci h5{font-size:.98rem;font-weight:600;margin-bottom:2px}
+  .ci .p{color:var(--honey-soft);font-size:.9rem}
+  .qty{display:flex;align-items:center;gap:10px;margin-top:8px}
+  .qty button{width:26px;height:26px;border-radius:7px;border:1px solid var(--line);background:var(--surface);color:var(--cream);cursor:pointer;font-size:1rem;line-height:1}
+  .qty button:hover{border-color:var(--honey)}
+  .qty span{min-width:18px;text-align:center;font-weight:600}
+  .ci .rm{background:none;border:none;color:var(--muted-2);cursor:pointer;font-size:.82rem;align-self:flex-start}
+  .ci .rm:hover{color:#e07a7a}
+  .drawer-foot{padding:20px 24px;border-top:1px solid var(--line);background:var(--surface)}
+  .promo-row{display:flex;gap:8px;margin-bottom:16px}
+  .promo-row input{
+    flex:1;background:var(--night);border:1px solid var(--line);border-radius:10px;
+    padding:11px 14px;color:var(--cream);font-family:var(--body);font-size:.9rem;letter-spacing:1px;text-transform:uppercase;
+  }
+  .promo-row input:focus{outline:none;border-color:var(--honey)}
+  .promo-row button{background:var(--surface-2);border:1px solid var(--line);color:var(--honey-soft);border-radius:10px;padding:0 16px;font-weight:600;cursor:pointer;font-family:var(--body)}
+  .promo-row button:hover{border-color:var(--honey)}
+  .promo-msg{font-size:.83rem;margin:-8px 0 14px;min-height:18px}
+  .ok{color:#5fd38d}.err{color:#e07a7a}
+  .totals .row{display:flex;justify-content:space-between;font-size:.94rem;color:var(--muted);margin-bottom:7px}
+  .totals .row.disc{color:#5fd38d}
+  .totals .grand{display:flex;justify-content:space-between;font-family:var(--display);font-size:1.4rem;font-weight:600;color:var(--cream);margin-top:10px;padding-top:12px;border-top:1px solid var(--line)}
+  .pay{width:100%;margin-top:16px;background:linear-gradient(135deg,var(--honey),var(--caramel));color:#2a1606;border:none;border-radius:13px;padding:16px;font-family:var(--body);font-weight:700;font-size:1.05rem;cursor:pointer;transition:transform .15s}
+  .pay:hover{transform:translateY(-2px)}
+  .pay:disabled{opacity:.4;cursor:not-allowed;transform:none}
+  .mp-note{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:12px;color:var(--muted-2);font-size:.8rem}
+
+  /* toast */
+  .toast{
+    position:fixed;bottom:26px;left:50%;z-index:120;
+    background:var(--surface-2);border:1px solid rgba(243,177,74,.3);color:var(--cream);
+    padding:13px 22px;border-radius:13px;font-size:.92rem;font-weight:500;
+    opacity:0;transform:translateX(-50%) translateY(20px);transition:.3s;box-shadow:0 12px 30px rgba(0,0,0,.5);
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(22px);animation:rise .7s ease forwards}
+  @keyframes rise{to{opacity:1;transform:translateY(0)}}
+
+  @media(max-width:640px){
+    .nav-links a{display:none}
+    .promo{flex-direction:column;align-items:flex-start}
+  }
+</style>
+</head>
+<body>
+<div class="glow-bg"></div>
+<div class="grain"></div>
+
+<nav>
+  <div class="wrap nav-in">
+    <a href="#" class="brand"><span class="moon"></span><b>Antojo Nocturno</b></a>
+    <div class="nav-links">
+      <a href="#menu">Menú</a>
+      <a href="#como">Cómo pedir</a>
+      <a href="#horario">Horario</a>
+    </div>
+    <button class="cart-btn" onclick="openCart()">
+      Mi pedido <span class="cart-count" id="count">0</span>
+    </button>
+  </div>
+</nav>
+
+<header>
+  <div class="moon-big"></div>
+  <div class="wrap">
+    <div class="hero-content">
+      <span class="eyebrow reveal">🌙 Repostería de medianoche · Antofagasta</span>
+      <h1 class="reveal" style="animation-delay:.08s">Tu antojo dulce,<br><em>cuando la ciudad duerme.</em></h1>
+      <p class="lede reveal" style="animation-delay:.16s">Cookies XL recién horneadas, brownies, cachitos y roscas fritas al momento. Hechos para esas noches en que solo un dulce arregla todo.</p>
+      <div class="hero-cta reveal" style="animation-delay:.24s">
+        <a href="#menu" class="btn-primary">Ver el menú</a>
+        <span class="hours"><span class="dot-live"></span> Atendemos de 19:00 a 01:00</span>
+      </div>
+    </div>
+
+    <div class="promo reveal" style="animation-delay:.32s">
+      <div>
+        <h3>¿Primera vez pidiendo por la web?</h3>
+        <p>Usa este código en tu pedido y te descontamos un 15%.</p>
+      </div>
+      <span class="code-chip">PRIMERA15</span>
+    </div>
+  </div>
+</header>
+
+<section id="menu">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">El menú</span>
+      <h2>Recién hecho, toda la noche</h2>
+    </div>
+    <div id="menu-root"></div>
+  </div>
+</section>
+
+<section id="como" style="background:var(--night-2)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Así de fácil</span>
+      <h2>Cómo pedir</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="n">01</div><h4>Elige tus antojos</h4><p>Arma tu pedido con cookies, brownies, packs y lo que se te antoje.</p></div>
+      <div class="step"><div class="n">02</div><h4>Aplica tu código</h4><p>¿Tienes un cupón de tu primer pedido? Escríbelo y se descuenta solo.</p></div>
+      <div class="step"><div class="n">03</div><h4>Paga online</h4><p>Pago seguro con tarjeta o transferencia. Rápido y sin enredos.</p></div>
+      <div class="step"><div class="n">04</div><h4>Te llega calentito</h4><p>Lo horneamos y armamos al momento para que llegue perfecto.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer id="horario">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div style="max-width:280px">
+        <a href="#" class="brand" style="margin-bottom:14px"><span class="moon"></span><b>Antojo Nocturno</b></a>
+        <p>Dark kitchen de repostería nocturna. Horneamos para tus noches de antojo.</p>
+      </div>
+      <div>
+        <h5>Horario</h5>
+        <p>Todos los días</p>
+        <p>19:00 — 01:00</p>
+      </div>
+      <div>
+        <h5>Despacho</h5>
+        <p>Antofagasta y alrededores</p>
+        <p>Costo según zona</p>
+      </div>
+      <div>
+        <h5>Síguenos</h5>
+        <a href="#">Instagram</a>
+        <a href="#">WhatsApp</a>
+        <a href="#">TikTok</a>
+      </div>
+    </div>
+    <div class="copy">© 2026 Antojo Nocturno · Hecho con cariño a medianoche.</div>
+  </div>
+</footer>
+
+<!-- CART -->
+<div class="backdrop" id="backdrop" onclick="closeCart()"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <h3>Mi pedido</h3>
+    <button class="x" onclick="closeCart()">×</button>
+  </div>
+  <div class="drawer-body" id="cart-body"></div>
+  <div class="drawer-foot" id="cart-foot" style="display:none">
+    <div class="promo-row">
+      <input id="promo-input" placeholder="Código de descuento" />
+      <button onclick="applyPromo()">Aplicar</button>
+    </div>
+    <div class="promo-msg" id="promo-msg"></div>
+    <div class="totals">
+      <div class="row"><span>Subtotal</span><span id="subtotal">$0</span></div>
+      <div class="row disc" id="disc-row" style="display:none"><span>Descuento (15%)</span><span id="disc">-$0</span></div>
+      <div class="row"><span>Despacho</span><span>Se calcula al confirmar</span></div>
+      <div class="grand"><span>Total</span><span id="total">$0</span></div>
+    </div>
+    <button class="pay" id="pay" onclick="pay()">Pagar pedido</button>
+    <div class="mp-note">🔒 Pago seguro procesado por Mercado Pago</div>
+  </div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CLP = n => "$" + n.toLocaleString("es-CL");
+
+const MENU = [
+  { cat:"Cookies", items:[
+    { id:"ckxl", name:"Cookie XL", meta:"100 g · 8–9 cm", price:2490 },
+    { id:"ck3", name:"Pack 3 Cookies XL", meta:"300 g · ahorro", price:6490, tag:"Pack" },
+    { id:"ck10", name:"Pack 10 cookies pequeñas", meta:"30 g c/u · para compartir", price:4990, tag:"Pack" },
+  ]},
+  { cat:"Brownies", items:[
+    { id:"bw", name:"Brownie", meta:"100 g · 6–7 cm", price:2490 },
+  ]},
+  { cat:"Cachitos rellenos", items:[
+    { id:"ca3", name:"3 Cachitos rellenos", meta:"60–70 g c/u · 11 cm", price:2490 },
+    { id:"ca6", name:"6 Cachitos rellenos", meta:"60–70 g c/u · 11 cm", price:4490 },
+  ]},
+  { cat:"Roscas fritas", items:[
+    { id:"ro4", name:"4 Roscas fritas", meta:"40–50 g c/u · al momento", price:2490 },
+    { id:"ro6", name:"6 Roscas fritas", meta:"40–50 g c/u · al momento", price:3490 },
+  ]},
+  { cat:"Maicenitos", items:[
+    { id:"ma6", name:"6 Maicenitos", meta:"35–40 g c/u · con manjar", price:2990 },
+    { id:"ma9", name:"9 Maicenitos", meta:"35–40 g c/u · con manjar", price:3990 },
+  ]},
+  { cat:"Packs Antojo", items:[
+    { id:"pk1", name:"Pack Antojo Nocturno", meta:"1 Cookie XL + 1 Brownie + 2 Cachitos", price:5990, feat:true, tag:"Favorito" },
+    { id:"pk2", name:"Pack Dulce para Compartir", meta:"2 Cookies XL + 3 Cachitos + 3 Maicenitos", price:9990, feat:true, tag:"Para 2-3" },
+    { id:"pk3", name:"Pack Degustación", meta:"1 Cookie + 1 Brownie + 2 Cachitos + 2 Maicenitos", price:7990, feat:true, tag:"Prueba todo" },
+  ]},
+];
+
+let cart = {};
+let discount = 0;
+
+function renderMenu(){
+  const root = document.getElementById("menu-root");
+  root.innerHTML = MENU.map(group => `
+    <h3 class="cat-title">${group.cat}</h3>
+    <div class="grid">
+      ${group.items.map(it => `
+        <div class="card ${it.feat?'feat':''}">
+          ${it.tag?`<span class="tag">${it.tag}</span>`:''}
+          <div class="top">
+            <h4>${it.name}</h4>
+            <span class="price">${CLP(it.price)}</span>
+          </div>
+          <span class="meta">${it.meta}</span>
+          <button class="add" onclick="add('${it.id}')">Agregar al pedido</button>
+        </div>
+      `).join("")}
+    </div>
+  `).join("");
+}
+
+function findItem(id){
+  for(const g of MENU){ const f=g.items.find(i=>i.id===id); if(f) return f; }
+}
+
+function add(id){
+  cart[id] = (cart[id]||0)+1;
+  update();
+  toast(findItem(id).name + " agregado 🌙");
+}
+function changeQty(id,d){
+  cart[id]=(cart[id]||0)+d;
+  if(cart[id]<=0) delete cart[id];
+  update();
+}
+function remove(id){ delete cart[id]; update(); }
+
+function subtotal(){
+  return Object.entries(cart).reduce((s,[id,q])=>s+findItem(id).price*q,0);
+}
+function count(){ return Object.values(cart).reduce((a,b)=>a+b,0); }
+
+function update(){
+  document.getElementById("count").textContent = count();
+  const body = document.getElementById("cart-body");
+  const foot = document.getElementById("cart-foot");
+  if(count()===0){
+    body.innerHTML = `<div class="empty"><div class="moon"></div><p>Tu pedido está vacío.<br>¡Date un gusto esta noche! 🍪</p></div>`;
+    foot.style.display="none";
+    return;
+  }
+  foot.style.display="block";
+  body.innerHTML = Object.entries(cart).map(([id,q])=>{
+    const it=findItem(id);
+    return `<div class="ci">
+      <div class="info">
+        <h5>${it.name}</h5>
+        <div class="p">${CLP(it.price)}</div>
+        <div class="qty">
+          <button onclick="changeQty('${id}',-1)">−</button>
+          <span>${q}</span>
+          <button onclick="changeQty('${id}',1)">+</button>
+          <button class="rm" onclick="remove('${id}')" style="margin-left:10px">Quitar</button>
+        </div>
+      </div>
+      <div class="p" style="font-weight:600">${CLP(it.price*q)}</div>
+    </div>`;
+  }).join("");
+
+  const sub = subtotal();
+  const discAmt = Math.round(sub*discount);
+  document.getElementById("subtotal").textContent = CLP(sub);
+  document.getElementById("total").textContent = CLP(sub-discAmt);
+  const dr=document.getElementById("disc-row");
+  if(discount>0){ dr.style.display="flex"; document.getElementById("disc").textContent="-"+CLP(discAmt); }
+  else dr.style.display="none";
+}
+
+function applyPromo(){
+  const v=document.getElementById("promo-input").value.trim().toUpperCase();
+  const msg=document.getElementById("promo-msg");
+  if(v==="PRIMERA15"){
+    discount=0.15;
+    msg.textContent="¡Listo! 15% de descuento aplicado 🎉";
+    msg.className="promo-msg ok";
+  }else if(v===""){
+    msg.textContent=""; 
+  }else{
+    discount=0;
+    msg.textContent="Ese código no es válido.";
+    msg.className="promo-msg err";
+  }
+  update();
+}
+
+function pay(){
+  toast("🔧 Modo de prueba: aquí se abrirá el pago de Mercado Pago cuando lancemos.");
+}
+
+function openCart(){ document.getElementById("drawer").classList.add("open"); document.getElementById("backdrop").classList.add("open"); }
+function closeCart(){ document.getElementById("drawer").classList.remove("open"); document.getElementById("backdrop").classList.remove("open"); }
+
+let toastTimer;
+function toast(t){
+  const el=document.getElementById("toast");
+  el.textContent=t; el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove("show"),2400);
+}
+
+renderMenu();
+update();
+</script>
+</body>
+</html>

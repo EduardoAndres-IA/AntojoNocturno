@@ -1,0 +1,14 @@
+# Dependencias
+node_modules/
+# Build / producción
+.next/
+out/
+dist/
+build/
+# Variables de entorno (¡nunca subir claves de Mercado Pago!)
+.env
+.env.local
+.env*.local
+# Sistema
+.DS_Store
+*.log
