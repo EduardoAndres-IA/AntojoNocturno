@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+/* ----------------------------------------------------------------
+   Antojo Nocturno — sistema de diseño
+   Tema nocturno cálido (dark kitchen de repostería).
+   Las fuentes (--font-fraunces / --font-hanken / --font-caveat)
+   las inyecta next/font desde layout.tsx.
+------------------------------------------------------------------- */
+@theme {
+  /* Colores de marca */
+  --color-night: #0b0a14;
+  --color-night-2: #120f1f;
+  --color-surface: #181428;
+  --color-surface-2: #1f1a30;
+  --color-honey: #f3b14a;
+  --color-honey-soft: #f7c777;
+  --color-caramel: #e08a4a;
+  --color-plum: #6a4a7a;
+  --color-cream: #f4ede0;
+  --color-muted: #a79db4;
+  --color-muted-2: #766d85;
+
+  /* Tipografías → generan utilidades font-display / font-body / font-hand */
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-body: var(--font-hanken), system-ui, sans-serif;
+  --font-hand: var(--font-caveat), cursive;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-night);
+  color: var(--color-cream);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Atmósfera: grano + glows radiales fijos detrás de todo */
+.an-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.an-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(700px 500px at 80% -5%, rgba(243, 177, 74, 0.13), transparent 60%),
+    radial-gradient(600px 600px at 5% 30%, rgba(106, 74, 122, 0.18), transparent 60%),
+    radial-gradient(900px 700px at 50% 110%, rgba(224, 138, 74, 0.08), transparent 60%);
+}
+
+/* Luna decorativa reutilizable */
+.an-moon {
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--color-honey-soft), var(--color-honey) 55%, var(--color-caramel));
+  box-shadow: 0 0 22px rgba(243, 177, 74, 0.55);
+  position: relative;
+  flex-shrink: 0;
+}
+.an-moon::after {
+  content: "";
+  position: absolute;
+  width: 30%;
+  height: 30%;
+  border-radius: 50%;
+  background: var(--color-night);
+  top: 16%;
+  right: 16%;
+}
+
+/* Placeholder de foto (gradiente + emoji) mientras no hay imágenes reales */
+.an-photo {
+  background:
+    radial-gradient(120px 90px at 30% 25%, rgba(247, 199, 119, 0.25), transparent 70%),
+    linear-gradient(150deg, var(--color-surface-2), var(--color-night-2));
+}
+
+/* Animación de entrada escalonada */
+@keyframes an-rise {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.an-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  animation: an-rise 0.7s ease forwards;
+}
+
+/* Punto "en vivo" del horario */
+@keyframes an-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.an-live {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #5fd38d;
+  box-shadow: 0 0 10px #5fd38d;
+  animation: an-pulse 2s infinite;
+}
+
+/* Ocultar scrollbar del carrusel manteniendo el scroll */
+.an-noscroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.an-noscroll::-webkit-scrollbar {
+  display: none;
+}

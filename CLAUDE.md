@@ -48,10 +48,20 @@ Packs Antojo (destacados):
 
 ## Stack técnico (plan acordado)
 
-- **Estado actual:** prototipo en un solo archivo `index.html` (HTML + CSS + JS vanilla).
-  Es el escaparate visual funcional, sin backend real todavía.
-- **Destino de producción:** **Next.js (React)** + **Tailwind CSS**, base de datos en
-  **Supabase (PostgreSQL)**, hosting en **Vercel**, pagos con **Mercado Pago**.
+- **Estado actual:** proyecto **Next.js 16 (App Router) + React 19 + Tailwind v4** en
+  TypeScript. El escaparate visual (landing) está migrado y funcional: hero, carrusel de
+  destacados, menú por categorías, banda del cupón PRIMERA15, "cómo pedir", footer y
+  carrito lateral. Aún **sin backend real** (pago en modo de prueba, sin base de datos).
+  El prototipo original en HTML quedó archivado en `prototipo/index.html` como referencia.
+- **Estructura del código:** `src/app/` (layout, page, globals.css con el tema),
+  `src/components/` (Navbar, Hero, FeaturedCarousel, MenuSection, PromoBand, Benefits,
+  HowToOrder, Footer, CartDrawer, Toast, CartProvider, Photo), `src/lib/menu.ts` (datos
+  del menú + helpers). El carrito vive en `CartProvider` (React context, lado cliente).
+- **Fotos:** todavía no hay imágenes reales; se usan placeholders (gradiente + emoji) en
+  el componente `Photo`. Para usar fotos reales: poner el archivo en `public/` y pasar la
+  ruta en el campo `image` de cada item en `src/lib/menu.ts`.
+- **Destino de producción (pendiente):** base de datos en **Supabase (PostgreSQL)**,
+  hosting en **Vercel**, pagos con **Mercado Pago**.
 - La dueña prefiere construir a medida con código (máximo control), pero NO es desarrolladora:
   explica los pasos con claridad y evita jerga innecesaria.
 
@@ -85,12 +95,16 @@ Tema **nocturno, cálido y antojable** ("dark kitchen" literal y temático).
 ## Roadmap (siguiente trabajo)
 
 1. [hecho] Escaparate visual + carrito + cupón (prototipo `index.html`).
-2. [pendiente] Migrar a Next.js + Tailwind manteniendo el diseño actual.
-3. [pendiente] Integrar Mercado Pago real (empezar en sandbox/modo prueba).
-4. [pendiente] Panel de administración para recibir y gestionar pedidos.
-5. [pendiente] Notificación de cada pedido a la dueña (correo / WhatsApp).
-6. [pendiente] Cálculo de despacho por zona y dominio propio en Vercel.
+2. [hecho] Migrar a Next.js + Tailwind manteniendo el diseño (rediseño inspirado en
+   referencia tipo "Tito Burger", adaptado a la marca nocturna).
+3. [pendiente] Reemplazar placeholders por fotos reales de los productos.
+4. [pendiente] Integrar Mercado Pago real (empezar en sandbox/modo prueba).
+5. [pendiente] Conectar Supabase (productos, pedidos, clientes) y validar PRIMERA15 de un solo uso.
+6. [pendiente] Panel de administración para recibir y gestionar pedidos.
+7. [pendiente] Notificación de cada pedido a la dueña (correo / WhatsApp).
+8. [pendiente] Cálculo de despacho por zona, dominio propio y publicación en Vercel.
 
-## Cómo correr el prototipo
-Abrir `index.html` en el navegador, o levantar un servidor local:
-`python3 -m http.server 8000` y entrar a http://localhost:8000
+## Cómo correr el proyecto
+En esta carpeta: `npm install` (solo la primera vez) y luego `npm run dev`.
+Abrir http://localhost:3000. Para compilar producción: `npm run build`.
+El prototipo viejo en HTML sigue disponible en `prototipo/index.html` (doble clic).

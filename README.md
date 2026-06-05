@@ -2,73 +2,65 @@
 
 Tienda online de la dark kitchen **Antojo Nocturno** (repostería nocturna, Antofagasta).
 
-Este es el prototipo de la web: el menú real, el carrito y el cupón de descuento
-**PRIMERA15** ya funcionan. Los pagos están en modo de prueba por ahora.
+Construida con **Next.js 16 + React 19 + Tailwind CSS v4** (TypeScript). El menú real, el
+carrito y el cupón **PRIMERA15** ya funcionan. Los pagos están en modo de prueba por ahora.
 
 ## Ver la web en tu PC
 
-**Opción rápida:** haz doble clic en `index.html` y se abre en tu navegador.
-
-**Opción recomendada (servidor local):** abre tu terminal en esta carpeta y corre:
+Abre tu terminal en esta carpeta y corre:
 
 ```bash
-python3 -m http.server 8000
+npm install   # solo la primera vez (instala las dependencias)
+npm run dev
 ```
 
-Luego entra a http://localhost:8000 en el navegador.
+Luego entra a **http://localhost:3000** en el navegador. Mientras `npm run dev` esté
+corriendo, cualquier cambio se ve al instante.
 
-## Trabajar con Claude Code
-
-Esta carpeta incluye un archivo `CLAUDE.md` con todo el contexto del negocio,
-el menú, el diseño y el plan técnico. Claude Code lo lee solo al iniciar, así que
-puedes abrir la carpeta en tu terminal y pedirle cosas directamente, por ejemplo:
-
-- "Migra el prototipo a Next.js manteniendo el diseño"
-- "Conecta el botón de pago con Mercado Pago en modo de prueba"
-- "Créame un panel para ver los pedidos que llegan"
-
-### Pasos
-1. Abre tu terminal dentro de esta carpeta (`antojo-nocturno`).
-2. Inicia Claude Code escribiendo: `claude`
-3. Pídele lo que quieras avanzar. Ya conoce el proyecto.
-
-## Subir a GitHub
-
-El proyecto ya viene como repositorio Git con un primer commit hecho.
-Para tenerlo en GitHub:
-
-1. Crea un repositorio nuevo y **vacío** en https://github.com/new
-   (ponle de nombre `antojo-nocturno`, no agregues README ni .gitignore,
-   porque este proyecto ya los trae).
-2. En tu terminal, dentro de esta carpeta, conecta y sube
-   (reemplaza `TU-USUARIO` por tu usuario de GitHub):
-
-```bash
-git remote add origin https://github.com/TU-USUARIO/antojo-nocturno.git
-git branch -M main
-git push -u origin main
-```
-
-> 💡 Si usas Claude Code, puedes simplemente pedirle: *"sube este proyecto a un
-> repo nuevo en GitHub"* y lo hace por ti (te pedirá iniciar sesión la primera vez).
-
-⚠️ **Importante:** nunca subas tus claves de Mercado Pago. El `.gitignore` ya
-ignora los archivos `.env`, que es donde deben ir esas claves.
+Para parar el servidor: `Ctrl + C` en la terminal.
 
 ## Estructura
 
 ```
-antojo-nocturno/
-├── index.html     # El prototipo de la web (todo en un archivo)
-├── CLAUDE.md      # Contexto del proyecto para Claude Code
-├── README.md      # Este archivo
-└── .gitignore
+src/
+├── app/
+│   ├── layout.tsx      # Fuentes (Fraunces, Hanken, Caveat) + metadatos
+│   ├── page.tsx        # Arma la página completa
+│   └── globals.css     # Tema de marca (colores, atmósfera, animaciones)
+├── components/         # Cada sección de la web (Hero, Menú, Carrito, etc.)
+└── lib/
+    └── menu.ts         # El menú y los precios (fuente de datos)
+
+prototipo/index.html    # El prototipo viejo en HTML (referencia)
+CLAUDE.md               # Contexto del negocio para Claude Code
 ```
 
-## Próximos pasos sugeridos
+## Cambiar el menú o los precios
 
-1. Migrar a Next.js + Tailwind (versión de producción).
-2. Integrar Mercado Pago real.
-3. Panel de administración de pedidos.
-4. Notificaciones de pedidos (correo / WhatsApp).
-5. Dominio propio y publicación.
+Edita **`src/lib/menu.ts`**. Ahí está cada producto con su nombre, descripción y precio.
+
+## Agregar fotos reales
+
+Hoy se usan placeholders (un emoji sobre un fondo degradado). Para usar fotos reales:
+
+1. Pon la imagen en la carpeta `public/` (por ejemplo `public/cookie-xl.jpg`).
+2. En `src/lib/menu.ts`, agrega `image: "/cookie-xl.jpg"` al producto correspondiente.
+
+La foto reemplaza al placeholder automáticamente.
+
+## Próximos pasos
+
+1. Reemplazar placeholders por fotos reales.
+2. Integrar Mercado Pago (empezar en modo de prueba).
+3. Conectar base de datos (Supabase) para guardar pedidos.
+4. Panel de administración de pedidos.
+5. Notificaciones (correo / WhatsApp) y publicación en Vercel.
+
+> ⚠️ **Nunca subas tus claves de Mercado Pago.** Van en un archivo `.env.local`, que ya
+> está ignorado por `.gitignore`.
+
+## Trabajar con Claude Code
+
+El archivo `CLAUDE.md` tiene todo el contexto del negocio, el menú y el plan. Claude Code
+lo lee solo al iniciar, así que puedes abrir esta carpeta y pedirle cosas directamente,
+por ejemplo: *"conecta el botón de pago con Mercado Pago en modo de prueba"*.
