@@ -82,7 +82,8 @@ export default function Hero() {
         >
           <Photo
             emoji="🌙"
-            alt="Pack Antojo Nocturno"
+            alt="Surtido de postres de Antojo Nocturno"
+            src="/img/hero.jpg"
             className="aspect-square w-full rounded-[28px] border border-honey/20 shadow-[0_30px_80px_rgba(0,0,0,0.5)]"
           />
 
