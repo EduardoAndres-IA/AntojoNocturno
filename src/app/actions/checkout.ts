@@ -1,6 +1,9 @@
 "use server";
 
+import { headers } from "next/headers";
+import { Preference } from "mercadopago";
 import { supabaseAdmin } from "@/lib/supabaseServer";
+import { getMpConfig, mpConfigurado } from "@/lib/mercadopago";
 import { MENU_INDEX } from "@/lib/menu";
 
 // Lo que envía el formulario de checkout desde el navegador.
@@ -23,6 +26,9 @@ export type CheckoutResult =
       descuento: number;
       total: number;
       cuponAplicado: string | null;
+      // URL de Mercado Pago para pagar. Si es null, MP no está configurado
+      // y el pedido solo quedó registrado (sin cobro).
+      initPoint: string | null;
     }
   | { ok: false; error: string };
 
@@ -143,7 +149,61 @@ export async function createOrder(
   if (errPedido || !pedido)
     return { ok: false, error: "No se pudo guardar el pedido. Intenta de nuevo." };
 
-  // 7) Si el cupón era personal (de fidelidad), marcarlo como usado.
+  // 7) Crear el cobro en Mercado Pago (preferencia de Checkout Pro).
+  let initPoint: string | null = null;
+  if (mpConfigurado()) {
+    try {
+      const hdrs = await headers();
+      const host = hdrs.get("host") ?? "";
+      const proto = hdrs.get("x-forwarded-proto") ?? "http";
+      const baseUrl = `${proto}://${host}`;
+      const esLocal = host.includes("localhost") || host.startsWith("127.");
+
+      // Con descuento mandamos una sola línea con el total (CLP no admite
+      // descuentos por ítem); sin descuento, el detalle producto por producto.
+      const prefItems =
+        descuento > 0
+          ? [
+              {
+                id: pedido.id,
+                title: `Pedido Antojo Nocturno (${itemsDetalle.length} productos)`,
+                quantity: 1,
+                unit_price: total,
+                currency_id: "CLP",
+              },
+            ]
+          : itemsDetalle.map((it) => ({
+              id: it.id,
+              title: it.nombre,
+              quantity: it.cantidad,
+              unit_price: it.precio,
+              currency_id: "CLP",
+            }));
+
+      const pref = new Preference(getMpConfig());
+      const result = await pref.create({
+        body: {
+          items: prefItems,
+          external_reference: pedido.id,
+          back_urls: {
+            success: `${baseUrl}/pago/exito`,
+            failure: `${baseUrl}/pago/error`,
+            pending: `${baseUrl}/pago/pendiente`,
+          },
+          // auto_return no admite URLs locales (http://localhost): solo en producción.
+          ...(esLocal ? {} : { auto_return: "approved" as const }),
+          notification_url: `${baseUrl}/api/mp/webhook`,
+          metadata: { pedido_id: pedido.id },
+        },
+      });
+      initPoint = result.init_point ?? result.sandbox_init_point ?? null;
+    } catch (e) {
+      // Si MP falla, no bloqueamos: el pedido queda registrado (pendiente).
+      console.error("Error creando preferencia de Mercado Pago:", e);
+    }
+  }
+
+  // 8) Si el cupón era personal (de fidelidad), marcarlo como usado.
   if (cuponAplicado && cuponEraPersonal) {
     await supabaseAdmin
       .from("cupones")
@@ -159,5 +219,6 @@ export async function createOrder(
     descuento,
     total,
     cuponAplicado,
+    initPoint,
   };
 }

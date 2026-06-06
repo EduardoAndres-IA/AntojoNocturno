@@ -41,6 +41,12 @@ export default function CheckoutForm({
         items,
       });
       if (res.ok) {
+        if (res.initPoint) {
+          // Ir a Mercado Pago a pagar.
+          window.location.href = res.initPoint;
+          return;
+        }
+        // Sin pago configurado: mostrar confirmación simple.
         onDone(res);
       } else {
         setError(res.error);
@@ -157,11 +163,10 @@ export default function CheckoutForm({
           disabled={enviando}
           className="mt-4 w-full rounded-xl bg-gradient-to-br from-honey to-caramel py-4 text-[1.05rem] font-bold text-[#2a1606] transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {enviando ? "Guardando…" : "Confirmar pedido"}
+          {enviando ? "Redirigiendo…" : "Ir a pagar"}
         </button>
-        <div className="mt-3 text-center text-[0.78rem] text-muted-2">
-          El pago en línea se habilita en el siguiente paso. Por ahora dejamos tu
-          pedido registrado.
+        <div className="mt-3 flex items-center justify-center gap-2 text-center text-[0.78rem] text-muted-2">
+          🔒 Pago seguro con Mercado Pago
         </div>
       </div>
     </form>
