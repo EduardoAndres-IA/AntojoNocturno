@@ -19,12 +19,14 @@ type CartContextValue = {
   discount: number; // fracción (0.15) si hay cupón válido
   discountAmount: number;
   total: number;
+  appliedCode: string | null; // código de cupón aplicado (lo revalida el servidor)
   promoMsg: { text: string; ok: boolean } | null;
   isOpen: boolean;
   toast: string | null;
   add: (id: string) => void;
   changeQty: (id: string, delta: number) => void;
   remove: (id: string) => void;
+  clear: () => void;
   applyPromo: (code: string) => void;
   openCart: () => void;
   closeCart: () => void;
@@ -45,6 +47,7 @@ export default function CartProvider({
 }) {
   const [cart, setCart] = useState<CartState>({});
   const [discount, setDiscount] = useState(0);
+  const [appliedCode, setAppliedCode] = useState<string | null>(null);
   const [promoMsg, setPromoMsg] = useState<CartContextValue["promoMsg"]>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
@@ -82,15 +85,26 @@ export default function CartProvider({
     });
   }, []);
 
+  const clear = useCallback(() => {
+    setCart({});
+    setDiscount(0);
+    setAppliedCode(null);
+    setPromoMsg(null);
+  }, []);
+
   const applyPromo = useCallback((code: string) => {
     const v = code.trim().toUpperCase();
     if (v === "PRIMERA15") {
       setDiscount(0.15);
+      setAppliedCode("PRIMERA15");
       setPromoMsg({ text: "¡Listo! 15% de descuento aplicado 🎉", ok: true });
     } else if (v === "") {
+      setDiscount(0);
+      setAppliedCode(null);
       setPromoMsg(null);
     } else {
       setDiscount(0);
+      setAppliedCode(null);
       setPromoMsg({ text: "Ese código no es válido.", ok: false });
     }
   }, []);
@@ -111,12 +125,14 @@ export default function CartProvider({
   const value: CartContextValue = {
     cart,
     discount,
+    appliedCode,
     promoMsg,
     isOpen,
     toast,
     add,
     changeQty,
     remove,
+    clear,
     applyPromo,
     openCart,
     closeCart,
